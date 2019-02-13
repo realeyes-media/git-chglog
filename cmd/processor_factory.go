@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/url"
 
-	chglog "github.com/realeyes-media/git-chglog"
+	chglog "github.com/realeyes-media/git-chglog/pkg/chglog"
 )
 
 // ProcessorFactory ...

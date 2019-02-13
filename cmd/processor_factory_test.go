@@ -3,7 +3,7 @@ package cmd
 import (
 	"testing"
 
-	chglog "github.com/realeyes-media/git-chglog"
+	chglog "github.com/realeyes-media/git-chglog/pkg/chglog"
 	"github.com/stretchr/testify/assert"
 )
 

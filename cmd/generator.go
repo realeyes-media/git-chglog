@@ -3,7 +3,7 @@ package cmd
 import (
 	"io"
 
-	chglog "github.com/realeyes-media/git-chglog"
+	chglog "github.com/realeyes-media/git-chglog/pkg/chglog"
 )
 
 // Generator ...
