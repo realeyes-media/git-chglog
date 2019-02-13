@@ -1,6 +1,7 @@
 package chglog
 
 import (
+	"regexp"
 	"strings"
 )
 
@@ -130,4 +131,27 @@ func (s *tagSelector) selectRangeTags(tags []*Tag, old string, new string) ([]*T
 	}
 
 	return res, from, nil
+}
+
+// FilterBadTags : Takes a list of tags and filters out any that don't contain a match for a SemVer conventional tag
+func (s *tagSelector) FilterBadTags(tags []*Tag) (after []*Tag, err error) {
+	var b bool
+	for _, tag := range tags {
+		b, err = checkSemVer(tag.Name)
+		if b {
+			after = append(after, tag)
+		}
+	}
+
+	return after, err
+}
+
+func checkSemVer(test string) (bool, error) {
+	r, err := regexp.Compile(`(\d+).(\d+).(\d+)`)
+	if err != nil {
+		return false, err
+	}
+	matched := r.MatchString(test)
+
+	return matched, nil
 }
