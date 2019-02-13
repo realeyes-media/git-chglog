@@ -280,6 +280,60 @@ func (gen *Generator) getTags(query string) ([]*Tag, string, error) {
 	return tags, first, nil
 }
 
+func (gen *Generator) getSemVerTags(query string) ([]*Tag, string, error) {
+	tags, err := gen.tagReader.ReadAll()
+	if err != nil {
+		return nil, "", err
+	}
+
+	// Adding in a filter mechanism to ignore non-SemVer tags
+	tags, err = gen.tagSelector.FilterBadTags(tags)
+	if err != nil {
+		return nil, "", err
+	}
+
+	next := gen.config.Options.NextTag
+	if next != "" {
+		for _, tag := range tags {
+			if next == tag.Name {
+				return nil, "", fmt.Errorf("\"%s\" tag already exists", next)
+			}
+		}
+
+		var previous *RelateTag
+		if len(tags) > 0 {
+			previous = &RelateTag{
+				Name:    tags[0].Name,
+				Subject: tags[0].Subject,
+				Date:    tags[0].Date,
+			}
+		}
+
+		// Assign the date with `readVersions()`
+		tags = append([]*Tag{
+			&Tag{
+				Name:     next,
+				Subject:  next,
+				Previous: previous,
+			},
+		}, tags...)
+	}
+
+	if len(tags) == 0 {
+		return nil, "", errors.New("git-tag does not exist")
+	}
+
+	first := ""
+	if query != "" {
+		tags, first, err = gen.tagSelector.Select(tags, query)
+		if err != nil {
+			return nil, "", err
+		}
+	}
+
+	return tags, first, nil
+}
+
 func (gen *Generator) workdir() (func() error, error) {
 	cwd, err := os.Getwd()
 	if err != nil {
