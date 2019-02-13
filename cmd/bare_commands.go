@@ -101,14 +101,12 @@ func (c *ShimConf) Do() (err error) {
 func (c *ShimConf) Check() (err error) {
 	s := []string{
 		"ConfigPath",
-		"OutputPath",
 		"Query",
 		"NextTag",
 	}
 
 	z := []string{
 		c.ConfigPath,
-		c.OutputPath,
 		c.Query,
 		c.NextTag,
 	}
