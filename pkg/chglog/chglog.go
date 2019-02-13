@@ -150,6 +150,36 @@ func (gen *Generator) Generate(w io.Writer, query string) error {
 	return gen.render(w, unreleased, versions)
 }
 
+// GenerateSemVer : Same as Generate() but ignores non-SemVer tags
+func (gen *Generator) GenerateSemVer(w io.Writer, query string) error {
+	back, err := gen.workdir()
+	if err != nil {
+		return err
+	}
+	defer back()
+
+	tags, first, err := gen.getSemVerTags(query)
+	if err != nil {
+		return err
+	}
+
+	unreleased, err := gen.readUnreleased(tags)
+	if err != nil {
+		return err
+	}
+
+	versions, err := gen.readVersions(tags, first)
+	if err != nil {
+		return err
+	}
+
+	if len(versions) == 0 {
+		return fmt.Errorf("commits corresponding to \"%s\" was not found", query)
+	}
+
+	return gen.render(w, unreleased, versions)
+}
+
 func (gen *Generator) readVersions(tags []*Tag, first string) ([]*Version, error) {
 	next := gen.config.Options.NextTag
 	versions := []*Version{}
