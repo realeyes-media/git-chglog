@@ -13,6 +13,7 @@ import (
 
 // Execute : Gather URFave CLI args and run the program with those settings
 func Execute() {
+	var err error
 	ttl := color.New(color.FgYellow).SprintFunc()
 
 	cli.AppHelpTemplate = fmt.Sprintf(`
@@ -138,26 +139,21 @@ func Execute() {
 			NextTag:    c.String("next-tag"),
 			SemVerOnly: c.Bool("semver"),
 		}
-
-		err := s.Do()
+		err = s.Do()
 		if err != nil {
 			return err
 		}
 		return nil
 	}
 
-	err := app.Run(os.Args)
+	err = app.Run(os.Args)
 	if err != nil {
-		log.Fatalln("err")
+		log.Fatalln(err)
 	}
 }
 
-// JustDo : A bring-your-own-config-gathering-tool option to start the program without URFave CLI.
+// JustDo : A bring-your-own-config-gathering-tool example option to start the program without URFave CLI.
 func JustDo(s *ShimConf) (err error) {
-	err = s.Check()
-	if err != nil {
-		return err
-	}
 	err = s.Do()
 	return err
 }

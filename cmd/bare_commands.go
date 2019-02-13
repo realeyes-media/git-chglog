@@ -24,12 +24,6 @@ type ShimConf struct {
 
 // Do : Start up the git-chnglog commands without using the Urfave CLI
 func (c *ShimConf) Do() (err error) {
-	// Check for what we need
-	err = c.Check()
-	if err != nil {
-		return err
-	}
-
 	// Set Generator if SemVer is requested via bool
 	g := NewGenerator()
 	if c.SemVerOnly {
@@ -92,31 +86,6 @@ func (c *ShimConf) Do() (err error) {
 	if ex != 0 {
 		err = errors.New("I tried to run what you asked, but it didn't work at all")
 		return err
-	}
-
-	return nil
-}
-
-// Check : Make sure all the needed string configs are set
-func (c *ShimConf) Check() (err error) {
-	s := []string{
-		"ConfigPath",
-		"Query",
-		"NextTag",
-	}
-
-	z := []string{
-		c.ConfigPath,
-		c.Query,
-		c.NextTag,
-	}
-
-	for i, x := range z {
-		if x == "" {
-			t := "Missing required config in Config struct: " + s[i]
-			err = errors.New(t)
-			return err
-		}
 	}
 
 	return nil
