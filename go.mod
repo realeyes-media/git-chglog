@@ -3,7 +3,6 @@ module github.com/realeyes-media/git-chglog
 require (
 	github.com/davecgh/go-spew v1.1.0 // indirect
 	github.com/fatih/color v1.6.0
-	github.com/git-chglog/git-chglog v0.0.0-20181110013429-44fcaed553e3
 	github.com/imdario/mergo v0.3.7
 	github.com/kr/pretty v0.1.0 // indirect
 	github.com/mattn/go-colorable v0.0.9
